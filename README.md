@@ -1,4 +1,4 @@
-# my-lede-feeds
+# findnr-feeds
 
 ## 安装说明
 
@@ -10,7 +10,7 @@
 - 在 OpenWrt 源码目录中添加本地 feed（推荐）：
 
 ```
-echo "src-link findnrfeeds https://github.com/findnr/my-lede-feeds.git" >> feeds.conf
+echo "src-link findnrfeeds https://github.com/findnr/findnr-feeds.git" >> feeds.conf
 ./scripts/feeds update findnrfeeds
 ./scripts/feeds install luci-app-simple2fa
 ```
