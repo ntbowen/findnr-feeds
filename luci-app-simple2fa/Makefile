@@ -14,7 +14,7 @@ define Package/luci-app-simple2fa
   SUBMENU:=3. Applications
   TITLE:=Simple 2FA (TOTP) for Login
   # 依赖关系：oathtool 与 qrencode；并确保有 base32 可用
-  DEPENDS:=+oath-toolkit-oathtool +qrencode +coreutils-base32
+  DEPENDS:=+oath-toolkit +qrencode +coreutils-base32
   PKGARCH:=all
 endef
 
