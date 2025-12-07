@@ -2,7 +2,7 @@
 
 ## 简介
 
-这是一个 OpenWrt 的 LuCI 插件 `luci-app-simple2fa`，旨在为路由器登录添加 **TOTP 二次验证 (2FA)** 功能。
+这是一个 OpenWrt （lede）的 LuCI 插件 `luci-app-simple2fa`，旨在为路由器登录添加 **TOTP 二次验证 (2FA)** 功能。
 
 ### ✨ 主要特性
 
@@ -13,19 +13,15 @@
     *   支持 **一键刷新密钥**。
     *   支持 **一键复制密钥**。
     *   支持 **二维码扫描** (Google Authenticator, Authy 等)。
-*   **体验优化**：验证失败自动重定向回登录页并提示错误，无需手动后退。
-
+    *   
 ## 安装说明
 
 - **依赖**：`oath-toolkit-oathtool`、`qrencode` (安装插件时会自动安装)
-- **注意**：不再依赖 `coreutils-base32`，已内置 Lua 实现。
 
 ### 方式一：通过 OpenWrt feeds 集成构建
-
-1. 在 OpenWrt 源码目录中添加本地 feed（推荐）：
-
+1. 在 OpenWrt (lede) 源码目录中添加本地 feed（推荐）：
 ```bash
-echo "src-link findnrfeeds https://github.com/findnr/findnr-feeds.git" >> feeds.conf
+echo "src-git findnrfeeds https://github.com/findnr/findnr-feeds.git" >> feeds.conf
 ./scripts/feeds update findnrfeeds
 ./scripts/feeds install luci-app-simple2fa
 ```
