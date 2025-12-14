@@ -1,0 +1,57 @@
+<% local uci=require "luci.model.uci" .cursor() local token=uci:get("vpnrss", "global" , "token" ) or "" %>
+
+	<fieldset class="cbi-section">
+		<legend>
+			<%:订阅链接%>
+		</legend>
+		<div class="cbi-section-descr">
+			<%:在您的客户端中使用这些链接。如果未设置密钥 (Token)，链接将是公开的，请谨慎分享！%>
+		</div>
+
+		<div style="padding: 10px; background: #f9f9f9; border: 1px solid #eee;">
+			<script type="text/javascript">
+				function copyToClipboard(elementId) {
+					var aux = document.createElement("input");
+					aux.setAttribute("value", document.getElementById(elementId).innerText);
+					document.body.appendChild(aux);
+					aux.select();
+					document.execCommand("copy");
+					document.body.removeChild(aux);
+					alert("已复制！");
+				}
+
+				function getBaseUrl() {
+					var protocol = window.location.protocol;
+					var host = window.location.host;
+					var token = "<%=token%>";
+					var query = (token && token !== "") ? "?token=" + token : "";
+					// If query already exists (no token but empty ?), handle it?
+					// Actually cleaner to just append
+					return protocol + "//" + host + "/cgi-bin/luci/vpnrss/subscribe" + query;
+				}
+
+				function renderLink(id, type) {
+					var url = getBaseUrl();
+					if (url.indexOf("?") === -1) {
+						url += "?client=" + type;
+					} else {
+						url += "&client=" + type;
+					}
+					document.write('<div style="margin-bottom:10px;">');
+					document.write('<strong>' + id + ': </strong>');
+					document.write('<code id="link_' + id + '">' + url + '</code> ');
+					document.write('<button class="cbi-button cbi-button-apply" onclick="copyToClipboard(\'link_' + id + '\')"><%:复制%></button>');
+					document.write('</div>');
+				}
+			</script>
+
+			<h3>Clash / Clash Meta</h3>
+			<script>renderLink('Clash', 'clash');</script>
+
+			<h3>Sing-box</h3>
+			<script>renderLink('Singbox', 'singbox');</script>
+
+			<h3>v2rayNG / 通用 (Base64)</h3>
+			<script>renderLink('Generic', 'base64');</script>
+		</div>
+	</fieldset>
