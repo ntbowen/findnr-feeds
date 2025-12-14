@@ -404,8 +404,12 @@ function to_clash(raw_nodes)
 		if p["reality-opts"] then
 			out = out .. "    client-fingerprint: " .. (p["client-fingerprint"] or "chrome") .. "\n"
 			out = out .. "    reality-opts:\n"
-			out = out .. "      public-key: " .. p["reality-opts"]["public-key"] .. "\n"
-			out = out .. "      short-id: " .. p["reality-opts"]["short-id"] .. "\n"
+			if p["reality-opts"]["public-key"] then
+				out = out .. "      public-key: " .. p["reality-opts"]["public-key"] .. "\n"
+			end
+			if p["reality-opts"]["short-id"] then
+				out = out .. "      short-id: " .. p["reality-opts"]["short-id"] .. "\n"
+			end
 		end
 	end
 	
