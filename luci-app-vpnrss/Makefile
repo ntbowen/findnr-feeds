@@ -27,7 +27,7 @@ define Package/luci-app-vpnrss/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/controller
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/vpnrss
-	$(INSTALL_DIR) $(1)/usr/share/vpnrss
+	$(INSTALL_DIR) $(1)/usr/lib/lua/vpnrss
 
 	$(CP) ./root/* $(1)/
 endef

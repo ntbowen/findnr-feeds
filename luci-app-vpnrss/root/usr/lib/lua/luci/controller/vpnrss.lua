@@ -33,10 +33,29 @@ function action_subscribe()
 	local nodes = {}
 	uci:foreach("vpnrss", "node", function(s)
 		if s.enable == '1' and s.link then
-			table.insert(nodes, {
-				alias = s.alias or "Node",
-				link = s.link
-			})
+			-- Support multiple links in one field (newline or comma separated)
+			-- 1. Collect all valid links first
+			local links = {}
+			for link in s.link:gmatch("[^%s,]+") do
+				link = link:gsub("[\r\n]", "")
+				if link ~= "" then
+					table.insert(links, link)
+				end
+			end
+
+			-- 2. Add nodes with smart naming
+			for i, link in ipairs(links) do
+				local alias = s.alias
+				-- If user provided an alias AND there are multiple links, append index
+				if alias and alias ~= "" and #links > 1 then
+					alias = alias .. " " .. i
+				end
+				
+				table.insert(nodes, {
+					alias = alias,
+					link = link
+				})
+			end
 		end
 	end)
 

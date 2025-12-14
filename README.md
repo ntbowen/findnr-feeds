@@ -5,6 +5,7 @@
 - luci-app-simple2fa，旨在为路由器登录添加 **TOTP 二次验证 (2FA)** 功能，这样在做内网穿透增加了一层安全防护。
 - luci-app-cymfrpc (客户端)` , **多实例管理**：支持同时运行多个 frpc 进程，互不干扰。
 - luci-app-cymfrps (服务端)，支持同时运行多个 frps 服务端进程。
+- luci-app-vpnrss (订阅生成器)，支持多协议聚合与转换 (Clash/Sing-box/Hysteria2)。
 
 ### ✨ 主要特性
 
@@ -31,6 +32,15 @@
 *   **纯文本配置**：支持 `ini/toml/yaml` 格式。
 <img width="958" height="371" alt="image" src="https://github.com/user-attachments/assets/16c1448b-a6bf-4771-9c98-fcc0b438d604" />
 
+#### luci-app-vpnrss (VPN 订阅生成器)
+*   **订阅聚合**：将多个零散节点聚合为一个订阅链接。
+*   **多协议支持**：支持 `vmess`, `vless`, `trojan`, `ss`, `hysteria2`。
+*   **多客户端适配**：自动生成 **Clash**, **Sing-box**, **Surge**, **Passwall/SSR+ (Base64)** 格式配置。
+*   **智能导入**：
+    *   支持**批量导入**：在一个输入框内粘贴多条链接（逗号或换行分隔）。
+    *   **智能命名**：自动为批量导入的节点添加序号（如 "香港 1", "香港 2"），避免重名。
+*   **安全保护**：支持 Token 访问控制，防止订阅被扫描。
+
 ## 安装说明
 
 - **依赖**：`oath-toolkit`、`qrencode` (安装插件时会自动安装)
@@ -45,6 +55,7 @@ echo "src-git findnrfeeds https://github.com/findnr/findnr-feeds.git" >> feeds.c
 ./scripts/feeds install cymfrp
 ./scripts/feeds install luci-app-cymfrpc
 ./scripts/feeds install luci-app-cymfrps
+./scripts/feeds install luci-app-vpnrss
 ```
 
 2. 选择并编译：
@@ -67,6 +78,7 @@ make package/feeds/findnrfeeds/luci-app-simple2fa/compile V=s
 make package/feeds/findnrfeeds/cymfrp/compile V=s
 make package/feeds/findnrfeeds/luci-app-cymfrpc/compile V=s
 make package/feeds/findnrfeeds/luci-app-cymfrps/compile V=s
+make package/feeds/findnrfeeds/luci-app-vpnrss/compile V=s
 ```
 
 2. 将生成的 `.ipk` 拷贝到路由器并安装：

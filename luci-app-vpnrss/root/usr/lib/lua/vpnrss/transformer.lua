@@ -222,11 +222,31 @@ local function parse_ss(link)
 	}
 end
 
+local function parse_hysteria2(link)
+	-- hysteria2://password@host:port?query#name
+	local u = parse_url(link)
+	if not u then return nil end
+	
+	local q = u.query or {}
+	return {
+		type = "hysteria2",
+		name = u.fragment,
+		server = u.host,
+		port = u.port,
+		password = u.user, -- user is password in hy2
+		sni = q.sni or q.peer,
+		insecure = (q.insecure == "1" or q.allowInsecure == "1"),
+		obfs = q.obfs,
+		obfs_password = q["obfs-password"]
+	}
+end
+
 local function parse_node(link)
 	if link:find("^vmess://") then return parse_vmess(link) end
 	if link:find("^vless://") then return parse_vless(link) end
 	if link:find("^trojan://") then return parse_trojan(link) end
 	if link:find("^ss://") then return parse_ss(link) end
+	if link:find("^hysteria2://") then return parse_hysteria2(link) end
 	return nil
 end
 
@@ -283,6 +303,14 @@ local function node_to_clash(node)
 				["public-key"] = node.pbk,
 				["short-id"] = node.sid
 			}
+		end
+	elseif node.type == "hysteria2" then
+		p.password = node.password
+		p.sni = node.sni
+		p["skip-cert-verify"] = node.insecure
+		if node.obfs then
+			p.obfs = node.obfs
+			p["obfs-password"] = node.obfs_password
 		end
 	end
 	
@@ -441,6 +469,14 @@ function to_singbox(raw_nodes)
 				o.method = p.cipher
 				o.password = p.password
 				o.type = "shadowsocks" -- singbox uses 'shadowsocks' full name
+			elseif p.type == "hysteria2" then
+				o.password = p.password
+				if p.obfs then
+					o.obfs = { type = p.obfs, password = p.obfs_password }
+				end
+				if p.tls == nil or p.tls == true then
+					o.tls = { enabled = true, server_name = p.sni, insecure = p.insecure }
+				end
 			end
 			
 			table.insert(outbounds, o)
