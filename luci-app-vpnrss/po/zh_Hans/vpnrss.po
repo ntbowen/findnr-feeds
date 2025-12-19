@@ -1,5 +1,8 @@
 msgid ""
-msgstr "Content-Type: text/plain; charset=UTF-8"
+msgstr ""
+"Project-Id-Version: luci-app-vpnrss\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 msgid "VPN RSS"
 msgstr "VPN RSS"
@@ -51,3 +54,15 @@ msgstr "粘贴完整的分享链接。支持批量粘贴。"
 
 msgid "Invalid link format. Must start with vmess://, vless://, trojan://, ss:// or hysteria2://"
 msgstr "链接格式无效。必须以 vmess://, vless://, trojan://, ss:// 或 hysteria2:// 开头"
+
+msgid "Subscription Links"
+msgstr "订阅链接"
+
+msgid "Use these links in your client. If no token is set, the links will be public, please share with caution!"
+msgstr "在您的客户端中使用这些链接。如果未设置密钥 (Token)，链接将是公开的，请谨慎分享！"
+
+msgid "Copied!"
+msgstr "已复制！"
+
+msgid "Copy"
+msgstr "复制"

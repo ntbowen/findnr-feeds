@@ -518,9 +518,9 @@ function to_base64(raw_nodes)
 				-- vless/trojan/ss: update fragment
 				-- This is tricky with regex, so we might skip it or do a simple replace
 				if line:find("#") then
-					line = line:gsub("#.*", "#" .. url_decode(n.alias))
+					line = line:gsub("#.*", "#" .. n.alias)
 				else
-					line = line .. "#" .. url_decode(n.alias)
+					line = line .. "#" .. n.alias
 				end
 			end
 		end

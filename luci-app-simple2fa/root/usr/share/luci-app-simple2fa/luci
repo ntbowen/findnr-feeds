@@ -5,6 +5,10 @@
 import { stdin, stdout, popen } from 'fs';
 import dispatch from 'luci.dispatcher';
 import request from 'luci.http';
+import { load as i18n_load, translate as _ } from 'luci.i18n';
+
+// 初始化 i18n
+i18n_load('simple2fa');
 
 // 初始化变量
 const input_bufsize = 4096;
@@ -100,7 +104,7 @@ const simple2fa_inject_js = `
         var tokenInput = document.createElement('input');
         tokenInput.type = 'text';
         tokenInput.name = 'token';
-        tokenInput.placeholder = '验证码 (未启用留空)';
+        tokenInput.placeholder = '${_("2FA Token (Leave empty if not enabled)")}';
         tokenInput.autocomplete = 'off';
         tokenInput.className = passInput.className;
         tokenInput.style.cssText = passInput.style.cssText;
@@ -133,7 +137,7 @@ const simple2fa_inject_js = `
         if (window.location.search.indexOf('simple2fa_err=1') !== -1) {
             var errDiv = document.createElement('div');
             errDiv.style.cssText = 'color: #d9534f; background: #f2dede; border: 1px solid #ebccd1; padding: 10px; margin-bottom: 15px; border-radius: 4px;';
-            errDiv.innerText = '验证码错误，请重试';
+            errDiv.innerText = '${_("Invalid 2FA token, please try again")}';
             
             var form = document.querySelector('form');
             if (form) {

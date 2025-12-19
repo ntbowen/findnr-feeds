@@ -14,13 +14,13 @@ define Package/luci-app-simple2fa/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/model/cbi/simple2fa
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/simple2fa
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DIR) $(1)/etc/uci-defaults
-	$(INSTALL_DIR) $(1)/usr/share/luci-app-simple2fa
+	$(INSTALL_DIR) $(1)/etc/init.d
 	
 	$(INSTALL_DATA) ./luasrc/controller/simple2fa.lua $(1)/usr/lib/lua/luci/controller/
 	$(INSTALL_DATA) ./luasrc/model/cbi/simple2fa/*.lua $(1)/usr/lib/lua/luci/model/cbi/simple2fa/
 	$(INSTALL_DATA) ./luasrc/view/simple2fa/*.htm $(1)/usr/lib/lua/luci/view/simple2fa/
 	$(CP) ./root/etc/config $(1)/etc/
+	$(INSTALL_BIN) ./root/etc/init.d/simple2fa $(1)/etc/init.d/
 	$(INSTALL_BIN) ./root/etc/uci-defaults/99_simple2fa_setup $(1)/etc/uci-defaults/
 	$(INSTALL_BIN) ./root/usr/share/luci-app-simple2fa/luci $(1)/usr/share/luci-app-simple2fa/luci
 endef

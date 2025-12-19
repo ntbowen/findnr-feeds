@@ -1,5 +1,8 @@
 msgid ""
-msgstr "Content-Type: text/plain; charset=UTF-8"
+msgstr ""
+"Project-Id-Version: luci-app-cymfrpc\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 msgid "CymFrpc Client"
 msgstr "CymFrpc 客户端"
@@ -30,3 +33,9 @@ msgstr "配置内容"
 
 msgid "Paste raw config content here, make sure the format is correct."
 msgstr "在此粘贴原始配置内容，请确保格式正确。"
+
+msgid "Running"
+msgstr "运行中"
+
+msgid "Stopped"
+msgstr "已停止"

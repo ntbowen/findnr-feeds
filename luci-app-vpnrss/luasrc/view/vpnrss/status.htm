@@ -23,13 +23,13 @@
 
 	<fieldset class="cbi-section">
 		<legend>
-			<%:订阅链接%>
+			<%:Subscription Links%>
 		</legend>
 		<div class="cbi-section-descr">
-			<%:在您的客户端中使用这些链接。如果未设置密钥 (Token)，链接将是公开的，请谨慎分享！%>
+			<%:Use these links in your client. If no token is set, the links will be public, please share with caution!%>
 		</div>
 
-		<div style="padding: 10px; background: #f9f9f9; border: 1px solid #eee;">
+		<div class="cbi-section-node">
 			<script type="text/javascript">
 				function copyToClipboard(elementId) {
 					var aux = document.createElement("input");
@@ -38,7 +38,7 @@
 					aux.select();
 					document.execCommand("copy");
 					document.body.removeChild(aux);
-					alert("已复制！");
+					alert('<%:Copied!%>');
 				}
 
 				function getBaseUrl() {
@@ -61,7 +61,7 @@
 					document.write('<div style="margin-bottom:10px;">');
 					document.write('<strong>' + id + ': </strong>');
 					document.write('<code id="link_' + id + '">' + url + '</code> ');
-					document.write('<button class="cbi-button cbi-button-apply" onclick="copyToClipboard(\'link_' + id + '\')"><%:复制%></button>');
+					document.write('<button class="cbi-button cbi-button-apply" onclick="copyToClipboard(\'link_' + id + '\')"><%:Copy%></button>');
 					document.write('</div>');
 				}
 			</script>

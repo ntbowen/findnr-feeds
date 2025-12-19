@@ -1,0 +1,45 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+STOP=10
+
+CGI_LUCI="/www/cgi-bin/luci"
+SIMPLE2FA_LUCI="/usr/share/luci-app-simple2fa/luci"
+
+boot() {
+	# Wait a bit for system to settle
+	sleep 2
+	start
+}
+
+start() {
+	local enabled=$(uci -q get simple2fa.global.enabled)
+	
+	if [ "$enabled" = "1" ]; then
+		# Backup original if not exists
+		if [ -f "$CGI_LUCI" ] && [ ! -f "${CGI_LUCI}.bak" ]; then
+			cp -f "$CGI_LUCI" "${CGI_LUCI}.bak"
+		fi
+		
+		# Enforce 2FA version
+		if [ -f "$SIMPLE2FA_LUCI" ]; then
+			# Only copy if different or missing
+			if ! cmp -s "$SIMPLE2FA_LUCI" "$CGI_LUCI"; then
+				cp -f "$SIMPLE2FA_LUCI" "$CGI_LUCI"
+				chmod +x "$CGI_LUCI"
+				logger -t simple2fa "2FA CGI enforced"
+			fi
+		fi
+	else
+		stop
+	fi
+}
+
+stop() {
+	# Restore original if backup exists
+	if [ -f "${CGI_LUCI}.bak" ]; then
+		cp -f "${CGI_LUCI}.bak" "$CGI_LUCI"
+		chmod +x "$CGI_LUCI"
+		logger -t simple2fa "Original CGI restored"
+	fi
+}

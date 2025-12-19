@@ -55,8 +55,8 @@ o.cfgvalue = function(self, section)
     local val = uci:get("simple2fa", section, "secret") or ""
     return string.format([[
         <div style="display: flex; align-items: center;">
-            <code id="secret_code" style="font-size: 1.2em; margin-right: 10px; background: #f0f0f0; padding: 5px; border-radius: 3px;">%s</code>
-            <input type="button" class="cbi-button cbi-button-apply" value="Copy" onclick="
+            <code id="secret_code" style="font-size: 1.2em; margin-right: 10px; padding: 5px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px;">%s</code>
+            <input type="button" class="cbi-button cbi-button-apply" value="]] .. translate("Copy") .. [[" onclick="
                 var code = document.getElementById('secret_code');
                 var range = document.createRange();
                 range.selectNode(code);
@@ -64,7 +64,7 @@ o.cfgvalue = function(self, section)
                 window.getSelection().addRange(range);
                 document.execCommand('copy');
                 window.getSelection().removeAllRanges();
-                alert('Copied!');
+                alert(']] .. translate("Copied!") .. [[');
             " />
         </div>
     ]], val)
@@ -73,7 +73,19 @@ end
 -- === 4. 刷新密钥按钮 ===
 local btn = s:option(Button, "_refresh", translate("Refresh Secret"))
 btn.inputstyle = "remove"
-btn.description = translate("Warning: After refreshing, you must reconfigure all authenticator apps.")
+btn.description = translate("Warning: After refreshing, you must reconfigure all authenticator apps.") .. [[
+<script type="text/javascript">
+    // 使用 setTimeout 确保 DOM 渲染完成
+    setTimeout(function() {
+        var btn = document.getElementsByName('cbid.simple2fa.global._refresh')[0];
+        if (btn) {
+            btn.onclick = function() {
+                return confirm(']] .. translate("Are you sure you want to refresh the secret key? This will invalidate your current authenticator setup.") .. [[');
+            };
+        }
+    }, 500);
+</script>
+]]
 btn.write = function(self, section)
     local new_secret = generate_secret()
     uci:set("simple2fa", section, "secret", new_secret)
@@ -91,49 +103,16 @@ qr.description = translate("Use Google Authenticator, Authy or Microsoft Auth to
 qr.template = "simple2fa/qrcode_view" 
 qr.otp_url = otp_url 
 
--- === 6. 应用更改逻辑 (文件替换) ===
+-- === 6. 应用更改逻辑 (通过 Init 脚本) ===
 function m.on_after_commit(self)
     local enabled = uci:get("simple2fa", "global", "enabled") == "1"
     
-    -- 定义文件路径
-    local files = {
-        {
-            origin = "/www/cgi-bin/luci",
-            backup = "/www/cgi-bin/luci.bak",
-            target = "/usr/share/luci-app-simple2fa/luci"
-        },
-        {
-            origin = "/www/luci-static/resources/view/bootstrap/sysauth.js",
-            backup = "/www/luci-static/resources/view/bootstrap/sysauth.js.bak",
-            target = "/usr/share/luci-app-simple2fa/sysauth.js"
-        }
-    }
-
     if enabled then
-        -- 启用：备份原文件 -> 覆盖
-        for _, f in ipairs(files) do
-            -- 1. 如果没有备份，先备份
-            if not nixio.fs.access(f.backup) and nixio.fs.access(f.origin) then
-                nixio.fs.copy(f.origin, f.backup)
-            end
-            
-            -- 2. 用我们的文件覆盖原文件
-            if nixio.fs.access(f.target) then
-                -- 先删除原文件 (cp 可能会失败如果目标是只读等情况，虽然这里应该没事)
-                nixio.fs.remove(f.origin)
-                nixio.fs.copy(f.target, f.origin)
-                nixio.fs.chmod(f.origin, 755) -- 确保可执行
-            end
-        end
+        sys.call("/etc/init.d/simple2fa enable")
+        sys.call("/etc/init.d/simple2fa start")
     else
-        -- 禁用：还原备份
-        for _, f in ipairs(files) do
-            if nixio.fs.access(f.backup) then
-                nixio.fs.remove(f.origin)
-                nixio.fs.move(f.backup, f.origin)
-                nixio.fs.chmod(f.origin, 755)
-            end
-        end
+        sys.call("/etc/init.d/simple2fa stop")
+        sys.call("/etc/init.d/simple2fa disable")
     end
 end
 

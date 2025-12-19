@@ -24,9 +24,9 @@ o.rawhtml = true
 function o.cfgvalue(self, section)
 	local pid = sys.exec("pgrep -f '/var/etc/cymfrpc/" .. section .. "\\.'")
 	if pid and #pid > 0 then
-		return "<span style=\"color:green; font-weight:bold\">Running (PID " .. pid:gsub("\n", "") .. ")</span>"
+		return string.format("<span style=\"color:green; font-weight:bold\">%s (PID %s)</span>", translate("Running"), pid:gsub("\n", ""))
 	else
-		return "<span style=\"color:red\">Stopped</span>"
+		return string.format("<span style=\"color:red\">%s</span>", translate("Stopped"))
 	end
 end
 

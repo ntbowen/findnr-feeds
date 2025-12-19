@@ -51,3 +51,15 @@ msgstr ""
 
 msgid "Invalid link format. Must start with vmess://, vless://, trojan://, ss:// or hysteria2://"
 msgstr ""
+
+msgid "Subscription Links"
+msgstr ""
+
+msgid "Use these links in your client. If no token is set, the links will be public, please share with caution!"
+msgstr ""
+
+msgid "Copied!"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
